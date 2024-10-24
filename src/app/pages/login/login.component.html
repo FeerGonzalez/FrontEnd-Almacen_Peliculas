@@ -10,22 +10,25 @@
         <form action="" #formulario="ngForm" class="margen-chico">
             <h1>Inicia Sesion</h1>
             <div>
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" [(ngModel)]="usuario.email">
-                <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-                    <span *ngIf="registerForm.get('email')?.errors?.['required']">El email es obligatorio.</span>
-                    <span *ngIf="registerForm.get('email')?.errors?.['email']">Formato de email incorrecto.</span>
+                <label for="username">Nombre de Usuario</label>
+                <input type="text" name="username" id="username" [(ngModel)]="usuario.email" class="text-input">
+                <!--
+                <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+                    <span *ngIf="loginForm.get('username')?.errors?.['required']">El username es obligatorio.</span>
                 </div>
+                -->
             </div>
             <div>
                 <label for="contraseña">Contraseña</label>
-                <input type="password" name="contraseña" id="contraseña" [(ngModel)]="usuario.contrasenia">
-                <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-                    <span *ngIf="registerForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</span>
-                    <span *ngIf="registerForm.get('password')?.errors?.['minlength']">
+                <input type="password" name="contraseña" id="contraseña" [(ngModel)]="usuario.contrasenia" class="text-input">
+                <!--
+                <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                    <span *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</span>
+                    <span *ngIf="loginForm.get('password')?.errors?.['minlength']">
                     La contraseña debe tener al menos 6 caracteres.
                     </span>
                 </div>
+                -->
             </div>
            
     

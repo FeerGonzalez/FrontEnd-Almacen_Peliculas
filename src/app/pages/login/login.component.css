@@ -12,6 +12,10 @@ body{
     color: whitesmoke;
 }
 
+.text-input{
+    color: black;
+}
+
 h1{
     font-size: 20px;
 }

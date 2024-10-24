@@ -1,0 +1,29 @@
+<p-toast />
+<div class="flex justify-content-center align-items-center min-h-screen w-full">
+    <p-card header="Formulario Pelicula" class="w-10">
+        <form [formGroup]="movieForm" (ngSubmit)="edit?updateMovie():createMovie()" class="flex flex-column gap-2">
+            <div class="field flex flex-column gap-1">
+                <label for="titulo">Titulo</label>
+                <input type="text" pInputText formControlName="titulo" class="w-5" />
+            </div>
+            <div class="field flex flex-column gap-1">
+                <label for="sinopsis">Sinopsis</label>
+                <textarea 
+                    rows="5" 
+                    cols="30" 
+                    pInputTextarea 
+                    formControlName="sinopsis"
+                    class="w-5">
+                </textarea>
+            </div>
+            <div class="field flex flex-column gap-1">
+                <label for="fechaSalida">Fecha de salida</label>
+                <p-calendar formControlName="fechaSalida" />
+            </div>
+            <div class="flex gap-2">
+                <p-button label="Guardar" [loading]="isSaveInProgress" type="submit"/>
+                <p-button label="Secondary" severity="secondary" />
+            </div>
+        </form>
+    </p-card>
+</div>

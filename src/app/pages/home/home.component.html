@@ -1,11 +1,71 @@
+<a routerLink="movies-form/new" class="p-button font-bold">
+  Agregar Pelicula
+</a>
+@for (movie of movies; track movie.id) {
+  <p-card header="{{movie.titulo}}" subheader="{{movie.sinopsis}}" [style]="{ width: '360px' }">
+      <ng-template pTemplate="header">
+          <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+      </ng-template>
+      <p>
+          {{movie.sinopsis}}
+      </p>
+      <p>
+          {{movie.fechaSalida}}
+      </p>
+
+      <ng-template pTemplate="footer">
+          <div class="flex gap-3 mt-1">
+              <p-button label="Borrar" severity="secondary" class="w-full" styleClass="w-full" />
+              <p-button label="Editar" class="w-full" styleClass="w-full" />
+          </div>
+      </ng-template>
+  </p-card>
+}@empty {
+  <p>No existen peliculas</p>
+}
+
+
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-left">
+          <a href="#">Nombre de la Empresa</a>
+        </div>
+        <div class="navbar-right">
+          <a href="#" class="cart-button">
+            <i class="fa-regular fa-cart-shopping"></i>
+          </a>
+        </div>
+    </nav>
+    
+    <section>
+
+      <p-card header="Advanced Card" subheader="Card Subheader" [style]="{ width: '360px' }">
+          <ng-template pTemplate="header">
+              <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+          </ng-template>
+          <p>
+              Lorem ipsum dolor sit amet...
+          </p>
+          <ng-template pTemplate="footer">
+              <div class="flex gap-3 mt-1">
+                  <p-button label="Cancel" severity="secondary" class="w-full" styleClass="w-full" />
+                  <p-button label="Save" class="w-full" styleClass="w-full" />
+              </div>
+          </ng-template>
+      </p-card>
+
+    </section>
+
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
 
         <ul class="navbar-nav">
@@ -139,10 +199,16 @@
         </li>
         </ul>
     </nav>
-
+    
+    
+    
     <script src="../../plugins/jquery/jquery.min.js"></script>
     <script src="../../plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../../dist/js/adminlte.min.js?v=3.2.0"></script>
+    
+    
 </body>
 </html>
+-->
+
