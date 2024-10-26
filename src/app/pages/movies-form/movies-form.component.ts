@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MoviesService } from '../../core/services/movies.service';
+import { ActoresService } from '../../core/services/actores.service';
+import { DirectorService } from '../../core/services/director.service';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -8,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @Component({
@@ -22,6 +25,7 @@ import { CardModule } from 'primeng/card';
     InputTextModule,
     CalendarModule,
     CardModule,
+    MultiSelectModule,
     
   ],
   templateUrl: './movies-form.component.html',
@@ -32,24 +36,32 @@ export class MoviesFormComponent {
   movieForm!:FormGroup
   isSaveInProgress: boolean = false;
   edit: boolean = false;
+  actorsList: any[] = [];
+  directoresList: any[] = [];
 
   constructor(
     private fb: FormBuilder, 
-    private movieService: MoviesService, 
+    private movieService: MoviesService,
+    private actorService: ActoresService,
+    private directorService: DirectorService,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
-    private router:Router
+    private router:Router,
   ){
     this.movieForm = this.fb.group({
       id: [null],
       titulo:['', Validators.required],
       sinopsis:['', Validators.required],
       fechaSalida:['', Validators.required],
+      selectedActors: [],
+      selectedDirectores: [],
     })
   }
   
   ngOnInit(): void {
     let id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.getActores();
+    this.getDirectores();
 
     if(id !== 'new'){
       this.edit = true;
@@ -129,5 +141,37 @@ export class MoviesFormComponent {
         this.router.navigateByUrl('/')
       }
     })
+  }
+
+  getActores(){
+    this.actorService.getActors().subscribe({
+      next: (foundActors) => {
+        this.actorsList = foundActors;
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar los actores'
+        });
+        //this.router.navigateByUrl('/');
+      }
+    });
+  }
+
+  getDirectores(){
+    this.directorService.getDirectores().subscribe({
+      next: (foundDirectores) => {
+        this.directoresList = foundDirectores;
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar los directores'
+        });
+        //this.router.navigateByUrl('/');
+      }
+    });
   }
 }

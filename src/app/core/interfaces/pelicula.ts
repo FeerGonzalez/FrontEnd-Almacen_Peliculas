@@ -9,13 +9,13 @@ export interface Pelicula {
     fechaSalida: string;
 }
 
-interface Actor {
+export interface Actor {
     id: number;
     nombre: string;
     apellido: string;
 }
 
-interface Director {
+export interface Director {
     id: number;
     nombre: string;
     apellido: string;
