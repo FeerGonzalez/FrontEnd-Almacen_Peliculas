@@ -1,17 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Pelicula, Actor, Director } from '../../core/interfaces/pelicula';
 import { MoviesService } from '../../core/services/movies.service';
 import { ActoresService } from '../../core/services/actores.service';
 import { DirectorService } from '../../core/services/director.service';
-import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
 import { MultiSelectModule } from 'primeng/multiselect';
-
 
 @Component({
   selector: 'app-movies-form',
@@ -26,18 +26,17 @@ import { MultiSelectModule } from 'primeng/multiselect';
     CalendarModule,
     CardModule,
     MultiSelectModule,
-    
   ],
   templateUrl: './movies-form.component.html',
-  styleUrl: './movies-form.component.css'
+  styleUrls: ['./movies-form.component.css']
 })
-export class MoviesFormComponent {
-
-  movieForm!:FormGroup
-  isSaveInProgress: boolean = false;
-  edit: boolean = false;
-  actorsList: any[] = [];
-  directoresList: any[] = [];
+export class MoviesFormComponent implements OnInit {
+  
+  movieForm!: FormGroup;
+  isSaveInProgress = false;
+  edit = false;
+  actorsList: Actor[] = [];
+  directoresList: Director[] = [];
 
   constructor(
     private fb: FormBuilder, 
@@ -46,104 +45,111 @@ export class MoviesFormComponent {
     private directorService: DirectorService,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
-    private router:Router,
-  ){
+    private router: Router,
+  ) {
+    // Configuración del formulario, con campos de actores y directores correctamente nombrados
     this.movieForm = this.fb.group({
       id: [null],
-      titulo:['', Validators.required],
-      sinopsis:['', Validators.required],
-      fechaSalida:['', Validators.required],
-      selectedActors: [],
-      selectedDirectores: [],
-    })
+      titulo: ['', Validators.required],
+      sinopsis: ['', Validators.required],
+      fechaSalida: ['', Validators.required],
+      actores: [[], Validators.required],       // Aquí especificamos "actores" en lugar de "actorsList"
+      directores: [[], Validators.required]     // Aquí especificamos "directores" en lugar de "directoresList"
+    });
   }
-  
+
   ngOnInit(): void {
-    let id = this.activatedRoute.snapshot.paramMap.get('id');
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.getActores();
     this.getDirectores();
 
-    if(id !== 'new'){
+    if (id && id !== 'new') {
       this.edit = true;
-      this.getMovieById(+id!)
+      this.getMovieById(+id);
     }
   }
 
-  getMovieById(id:number){
+  getMovieById(id: number) {
     this.movieService.getMoviesById(id).subscribe({
-      next: (foundMovie) =>{
+      next: (foundMovie) => {
         this.movieForm.patchValue(foundMovie);
       },
-      error:()=>{
+      error: () => {
         this.messageService.add({
-          severity: 'error', 
-          summary: 'Error', 
-          detail: 'No encontrado'
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Película no encontrada'
         });
-        this.router.navigateByUrl('/')
+        this.router.navigateByUrl('/');
       }
-    })
+    });
   }
 
-  createMovie(){
-    if(this.movieForm.invalid){
+  createMovie() {
+    if (this.movieForm.invalid) {
       this.messageService.add({
-        severity: 'error', 
-        summary: 'Error', 
+        severity: 'error',
+        summary: 'Error',
         detail: 'Revise los campos e intente nuevamente'
       });
-      return
+      return;
     }
+    this.isSaveInProgress = true;
     this.movieService.createMovie(this.movieForm.value).subscribe({
-      next: () =>{
+      next: () => {
         this.messageService.add({
-          severity: 'success', 
-          summary: 'Guardado', 
-          detail: 'Pelicula guardada exitosamente'
+          severity: 'success',
+          summary: 'Guardado',
+          detail: 'Película guardada exitosamente'
         });
-        this.router.navigateByUrl('/')
+        this.router.navigateByUrl('/');
       },
-      error:()=>{
+      error: () => {
         this.messageService.add({
-          severity: 'error', 
-          summary: 'Error', 
-          detail: 'No encontrado'
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al guardar la película'
         });
-        this.router.navigateByUrl('/')
+      },
+      complete: () => {
+        this.isSaveInProgress = false;
       }
-    })
+    });
   }
 
-  updateMovie(){
-    if(this.movieForm.invalid){
+  updateMovie() {
+    if (this.movieForm.invalid) {
       this.messageService.add({
-        severity: 'error', 
-        summary: 'Error', 
+        severity: 'error',
+        summary: 'Error',
         detail: 'Revise los campos e intente nuevamente'
       });
-      return
+      return;
     }
+    this.isSaveInProgress = true;
     this.movieService.updateMovie(this.movieForm.value).subscribe({
-      next: () =>{
+      next: () => {
         this.messageService.add({
-          severity: 'success', 
-          summary: 'Guardado', 
-          detail: 'Pelicula actualizada exitosamente'
+          severity: 'success',
+          summary: 'Guardado',
+          detail: 'Película actualizada exitosamente'
         });
-        this.router.navigateByUrl('/')
+        this.router.navigateByUrl('/');
       },
-      error:()=>{
+      error: () => {
         this.messageService.add({
-          severity: 'error', 
-          summary: 'Error', 
-          detail: 'No encontrado'
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al actualizar la película'
         });
-        this.router.navigateByUrl('/')
+      },
+      complete: () => {
+        this.isSaveInProgress = false;
       }
-    })
+    });
   }
 
-  getActores(){
+  getActores() {
     this.actorService.getActors().subscribe({
       next: (foundActors) => {
         this.actorsList = foundActors;
@@ -154,12 +160,11 @@ export class MoviesFormComponent {
           summary: 'Error',
           detail: 'No se pudieron cargar los actores'
         });
-        //this.router.navigateByUrl('/');
       }
     });
   }
 
-  getDirectores(){
+  getDirectores() {
     this.directorService.getDirectores().subscribe({
       next: (foundDirectores) => {
         this.directoresList = foundDirectores;
@@ -170,8 +175,15 @@ export class MoviesFormComponent {
           summary: 'Error',
           detail: 'No se pudieron cargar los directores'
         });
-        //this.router.navigateByUrl('/');
       }
     });
+  }
+
+  onSubmit() {
+    if (this.edit) {
+      this.updateMovie();
+    } else {
+      this.createMovie();
+    }
   }
 }
