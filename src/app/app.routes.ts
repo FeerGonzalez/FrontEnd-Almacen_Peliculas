@@ -4,6 +4,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { MoviesComponent } from './pages/movies/movies.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { MoviesFormComponent } from './pages/movies-form/movies-form.component';
+import { RegisterActorDirectorComponent } from './register-actor-director/register-actor-director.component';
+import { AuthGuard } from './core/auth/authguard';
 
 export const routes: Routes = [
     {
@@ -14,26 +16,37 @@ export const routes: Routes = [
     {
         path:'',
         component: HomeComponent,
-        title:'Pagina Principal'
+        title:'Pagina Principal',
+        canActivate: [AuthGuard],
     },
     {
         path:'movies',
         component: MoviesComponent,
-        title:'Peliculas'
+        title:'Peliculas',
+        canActivate: [AuthGuard],
     },
     {
         path:'movies-form/:id',
         component: MoviesFormComponent,
-        title:'Formulario Pelicula'
+        title:'Formulario Pelicula',
+        canActivate: [AuthGuard],
     },
     {
         path:'register',
         component: RegisterComponent,
-        title:'Registro'
+        title:'Registro',
+        canActivate: [AuthGuard],
+    },
+    {
+        path:'actores-form',
+        component: RegisterActorDirectorComponent,
+        title:'Registro de actores',
+        canActivate: [AuthGuard],
     },
     {
         path:'**',
         redirectTo:'',
-        pathMatch: 'full'
+        pathMatch: 'full',
+        canActivate: [AuthGuard],
     }
 ];

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Pelicula, Actor, Director } from '../../core/interfaces/pelicula';
+import { Pelicula } from '../../core/interfaces/pelicula';
+import { Actor } from '../../core/interfaces/actor';
+import { Director } from '../../core/interfaces/director';
 import { MoviesService } from '../../core/services/movies.service';
 import { ActoresService } from '../../core/services/actores.service';
 import { DirectorService } from '../../core/services/director.service';

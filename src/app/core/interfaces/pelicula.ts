@@ -1,3 +1,6 @@
+import { Actor } from "./actor";
+import { Director } from "./director";
+
 export interface Pelicula {
     id: number;
     titulo: string;
@@ -9,14 +12,3 @@ export interface Pelicula {
     fechaSalida: string;
 }
 
-export interface Actor {
-    id: number;
-    nombre: string;
-    apellido: string;
-}
-
-export interface Director {
-    id: number;
-    nombre: string;
-    apellido: string;
-}

@@ -6,6 +6,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MessageService } from 'primeng/api';
+import { initializeKeycloak } from './core/auth/keycloak-init';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()), 
     provideAnimationsAsync(),
     MessageService,
+    initializeKeycloak(),
   ],
 };

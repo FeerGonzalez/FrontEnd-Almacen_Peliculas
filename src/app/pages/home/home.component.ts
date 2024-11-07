@@ -5,6 +5,8 @@ import { Pelicula } from '../../core/interfaces/pelicula';
 import { MoviesService } from '../../core/services/movies.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { KeycloakService } from 'keycloak-angular';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -14,13 +16,33 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./home.component.css']  // Nota: Corregido styleUrl a styleUrls para que acepte un arreglo.
 })
 export class HomeComponent implements OnInit {
-
+  isAuthenticated = false;
+  userToken: string | undefined;
   movies: Pelicula[] = [];
 
-  constructor(private movieService: MoviesService) {}
+  constructor(
+    private movieService: MoviesService,
+    private keycloakService: KeycloakService,
+    private location: Location
+  ) {}
 
-  ngOnInit(): void {
-    this.getAllMovies();
+  async ngOnInit(): Promise<void> {
+    // Verifica si el usuario está autenticado
+    this.isAuthenticated = await this.keycloakService.isLoggedIn();
+
+    if (this.isAuthenticated) {
+      // Limpia los parámetros de la URL (opcional)
+      this.location.replaceState('/');
+
+      // Obtiene el token de acceso
+      this.userToken = await this.keycloakService.getToken();
+      console.log('Access Token:', this.userToken);
+
+      // Llama a getAllMovies solo si el usuario está autenticado
+      this.getAllMovies();
+    } else {
+      console.log('User is not authenticated');
+    }
   }
 
   getAllMovies(): void {

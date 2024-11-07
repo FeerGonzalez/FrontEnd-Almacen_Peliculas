@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Pelicula } from '../interfaces/pelicula';
+import { Actor } from '../interfaces/actor';
+import { Director } from '../interfaces/director';
 
 @Injectable({
   providedIn: 'root'
@@ -30,5 +32,13 @@ export class MoviesService {
 
   deleteMovieById(id:number){
     return this.http.delete('${this.apiUrl}/${id}');
+  }
+
+  createActor(actor: Actor): Observable<Actor> {
+    return this.http.post<Actor>('http://localhost:8080/almacen/actor', actor);
+  }
+
+  createDirector(director: Director): Observable<Director> {
+    return this.http.post<Director>('http://localhost:8080/almacen/director', director);
   }
 }
